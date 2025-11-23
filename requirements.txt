@@ -1,0 +1,5 @@
+django
+python-dotenv
+psycopg
+psycopg[binary]
+psycopg2-binary

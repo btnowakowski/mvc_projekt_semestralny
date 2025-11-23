@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Usuń usługę</h1>
+<p>Czy na pewno usunąć: <b>{{ object.name }}</b>?</p>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger">Tak, usuń</button>
+</form>
+{% endblock %}

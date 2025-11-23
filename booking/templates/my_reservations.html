@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h1 class="mb-1">Moje rezerwacje</h1>
+    <div class="text-muted-2 small">Tu widzisz status i możesz anulować termin.</div>
+  </div>
+  <a class="btn btn-outline-light btn-sm" href="{% url 'booking:service_list' %}">+ Nowa rezerwacja</a>
+</div>
+<div class="card-soft p-3 mb-4">
+  <form method="get" class="row g-2 align-items-end">
+    
+    <div class="col-md-4">
+      <label class="form-label">Status</label>
+      <select name="status" class="form-select">
+        <option value="">Wszystkie</option>
+        <option value="pending"   {% if selected_status == "pending" %}selected{% endif %}>Oczekujące</option>
+        <option value="approved"  {% if selected_status == "approved" %}selected{% endif %}>Zatwierdzone</option>
+        <option value="cancelled" {% if selected_status == "cancelled" %}selected{% endif %}>Anulowane</option>
+        <option value="rejected"  {% if selected_status == "rejected" %}selected{% endif %}>Odrzucone</option>
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Usługa</label>
+      <select name="service" class="form-select">
+        <option value="">Wszystkie</option>
+        {% for s in services %}
+        <option value="{{ s.id }}" {% if selected_service == s.id|stringformat:"s" %}selected{% endif %}>
+          {{ s.name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100">Filtruj</button>
+    </div>
+
+    <div class="col-md-2">
+      <a href="{% url 'booking:my_reservations' %}" class="btn btn-outline-light w-100">Wyczyść</a>
+    </div>
+
+  </form>
+</div>
+
+<div class="row g-3">
+  {% for r in reservations %}
+    <div class="col-12">
+      <div class="res-card card-soft p-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+
+        <!-- LEWA: info -->
+        <div class="res-info">
+          <div class="res-title">{{ r.service.name }}</div>
+
+          <div class="res-meta text-muted-2">
+            Termin:
+            {% if r.slot %}
+              {{ r.slot.start|date:"d.m.Y H:i" }}
+            {% else %}
+              {{ r.archived_start|date:"d.m.Y H:i" }}
+              <span class="small ms-1">(archiwalny)</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- PRAWA: status + akcje -->
+        <div class="res-actions d-flex align-items-center gap-2 flex-wrap justify-content-md-end">
+
+          <span class="res-badge badge
+            {% if r.status == 'pending' %} bg-warning text-dark
+            {% elif r.status == 'approved' %} bg-success
+            {% elif r.status == 'cancelled' %} bg-secondary
+            {% else %} bg-danger
+            {% endif %}">
+            {{ r.get_status_display }}
+          </span>
+
+          <a class="btn btn-outline-light btn-sm"
+             href="{% url 'booking:reservation_detail' r.id %}">
+            Szczegóły
+          </a>
+
+          {% if r.status == 'pending' or r.status == 'approved' %}
+            <a class="btn btn-outline-danger btn-sm"
+               href="{% url 'booking:reservation_cancel' r.id %}">
+              Anuluj
+            </a>
+          {% else %}
+            <!-- placeholder żeby układ był równy -->
+            <span class="btn btn-outline-danger btn-sm invisible">Anuluj</span>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-muted-2">Nie masz jeszcze rezerwacji.</p>
+  {% endfor %}
+</div>
+
+
+{% endblock %}

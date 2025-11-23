@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="admin-hero">
+  <div>
+    <h1 class="mb-1">Usługi</h1>
+    <div class="text-muted-2 small">Dodawanie i edycja oferty.</div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <a class="btn btn-primary btn-sm" href="{% url 'booking:admin_services_add' %}">+ Dodaj usługę</a>
+    <a class="btn btn-outline-light btn-sm" href="{% url 'booking:admin_dashboard' %}">Dashboard</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  {% for s in object_list %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card-soft p-3 h-100 d-flex flex-column">
+        <h3 class="h5 mb-1">{{ s.name }}</h3>
+        <p class="text-muted-2 small flex-grow-1">{{ s.description|default:"Brak opisu" }}</p>
+
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <span class="fw-semibold">{{ s.price }} zł</span>
+          <div class="d-flex gap-2">
+            <a class="btn btn-outline-light btn-sm" href="{% url 'booking:admin_services_edit' s.id %}">Edytuj</a>
+            <a class="btn btn-outline-danger btn-sm" href="{% url 'booking:admin_services_delete' s.id %}">Usuń</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-muted-2">Brak usług.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

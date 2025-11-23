@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-center">
+  <div class="card-soft p-4 w-100" style="max-width:520px;">
+    <h2 class="mb-3">Rejestracja</h2>
+    <p class="text-muted-2 mb-4">Załóż konto w kilka sekund.</p>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger small">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <div class="mb-3">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {% if form.username.help_text %}
+          <div class="form-text text-muted-2 small">{{ form.username.help_text|safe }}</div>
+        {% endif %}
+        {% for e in form.username.errors %}
+          <div class="text-danger small mt-1">{{ e }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="mb-3">
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {% for e in form.email.errors %}
+          <div class="text-danger small mt-1">{{ e }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="mb-3">
+        {{ form.password1.label_tag }}
+        {{ form.password1 }}
+        {% if form.password1.help_text %}
+          <div class="form-text text-muted-2 small">{{ form.password1.help_text|safe }}</div>
+        {% endif %}
+        {% for e in form.password1.errors %}
+          <div class="text-danger small mt-1">{{ e }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="mb-3">
+        {{ form.password2.label_tag }}
+        {{ form.password2 }}
+        {% for e in form.password2.errors %}
+          <div class="text-danger small mt-1">{{ e }}</div>
+        {% endfor %}
+      </div>
+
+      <button class="btn btn-primary w-100 py-2">Załóż konto</button>
+    </form>
+
+    <div class="text-center mt-3 small text-muted-2">
+      Masz już konto?
+      <a href="/accounts/login/">Zaloguj się</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

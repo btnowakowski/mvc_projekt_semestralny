@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="admin-hero">
+  <h1 class="mb-0">Termin</h1>
+  <a class="btn btn-outline-light btn-sm" href="{% url 'booking:admin_slots' %}">← Lista terminów</a>
+</div>
+
+<div class="card-soft p-4">
+    <form method="post" class="row g-3">
+    {% csrf_token %}
+
+    <div class="col-12">
+        <label class="form-label">Usługa</label>
+        {{ form.service }}
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Start</label>
+        {{ form.start }}
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Koniec</label>
+        {{ form.end }}
+    </div>
+
+    <div class="col-12 form-check mt-2">
+        {{ form.is_active }}
+        <label class="form-check-label ms-2">Aktywny termin</label>
+    </div>
+
+    <div class="d-flex gap-2 mt-2">
+        <button class="btn btn-success">Zapisz</button>
+        <a class="btn btn-outline-light" href="{% url 'booking:admin_slots' %}">Anuluj</a>
+    </div>
+    </form>
+
+</div>
+
+{% endblock %}

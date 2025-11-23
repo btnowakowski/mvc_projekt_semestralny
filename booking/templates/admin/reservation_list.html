@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="admin-hero">
+  <div>
+    <h1 class="mb-1">Rezerwacje</h1>
+    <div class="text-muted-2 small">Lista wszystkich rezerwacji.</div>
+  </div>
+
+  <div class="admin-tabs">
+    <a href="{% url 'booking:admin_dashboard' %}">Dashboard</a>
+    <a href="{% url 'booking:admin_services' %}">Usługi</a>
+    <a href="{% url 'booking:admin_slots' %}">Terminy</a>
+    <a class="active" href="{% url 'booking:admin_reservations' %}">Rezerwacje</a>
+  </div>
+</div>
+
+<div class="card-soft p-3">
+  <div class="table-responsive">
+    <table class="table table-dark table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Użytkownik</th>
+          <th>Usługa</th>
+          <th>Termin</th>
+          <th>Status</th>
+          <th class="text-end">Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for r in object_list %}
+        <tr>
+          <td>{{ r.user.username }}</td>
+          <td>{{ r.service.name }}</td>
+        {% if r.slot %}
+            <td>{{ r.slot.start|date:"d.m.Y H:i" }}</td>
+        {% else %}
+            <td>{{ r.archived_start|date:"d.m.Y H:i" }}</td>
+        {% endif %}
+          
+          <td>
+            <span class="badge badge-soft
+              {% if r.status == 'pending' %} bg-warning text-dark
+              {% elif r.status == 'approved' %} bg-success
+              {% elif r.status == 'cancelled' %} bg-secondary
+              {% else %} bg-danger
+              {% endif %}">
+              {{ r.get_status_display }}
+            </span>
+          </td>
+          <td class="text-end">
+            {% if r.status == 'pending' %}
+              <a class="btn btn-success btn-sm" href="{% url 'booking:admin_approve' r.id %}">Approve</a>
+              <a class="btn btn-outline-danger btn-sm" href="{% url 'booking:admin_reject' r.id %}">Reject</a>
+            {% else %}
+              <span class="text-muted-2 small">Brak akcji</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="text-muted-2">Brak rezerwacji.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

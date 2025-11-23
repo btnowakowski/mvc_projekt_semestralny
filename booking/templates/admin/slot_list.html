@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="admin-hero">
+  <div>
+    <h1 class="mb-1">Terminy</h1>
+    <div class="text-muted-2 small">Zarządzanie terminami.</div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <a class="btn btn-primary btn-sm" href="{% url 'booking:admin_slots_add' %}">+ Dodaj termin</a>
+    <a class="btn btn-outline-light btn-sm" href="{% url 'booking:admin_dashboard' %}">Dashboard</a>
+  </div>
+</div>
+
+<div class="card-soft p-3">
+  <div class="table-responsive">
+    <table class="table table-dark table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Usługa</th>
+          <th>Start</th>
+          <th>Koniec</th>
+          <th>Aktywny</th>
+          <th class="text-end">Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for t in object_list %}
+        <tr>
+          <td>{{ t.service.name }}</td>
+          <td>{{ t.start|date:"Y-m-d H:i" }}</td>
+          <td>{{ t.end|date:"Y-m-d H:i" }}</td>
+          <td>
+            {% if t.is_active %}
+              <span class="badge bg-success badge-soft">TAK</span>
+            {% else %}
+              <span class="badge bg-secondary badge-soft">NIE</span>
+            {% endif %}
+          </td>
+          <td class="text-end">
+            <a class="btn btn-outline-light btn-sm" href="{% url 'booking:admin_slots_edit' t.id %}">Edytuj</a>
+            <a class="btn btn-outline-danger btn-sm" href="{% url 'booking:admin_slots_delete' t.id %}">Usuń</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="text-muted-2">Brak terminów.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

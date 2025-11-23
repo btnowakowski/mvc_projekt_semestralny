@@ -1,0 +1,30 @@
+# Python / venv
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django
+db.sqlite3
+*.log
+media/
+staticfiles/
+local_settings.py
+.env
+.env.*
+
+# Migrations cache
+**/migrations/__pycache__/
+
+# VS Code
+.vscode/
+.DS_Store
+
+# Tests / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+migrations

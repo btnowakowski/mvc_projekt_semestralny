@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card-soft p-4 mx-auto" style="max-width: 600px;">
+  
+  <h2 class="mb-3">{{ reservation.service.name }}</h2>
+
+  <div class="mb-3">
+    <div class="text-muted-2 small">Status</div>
+    <span class="badge 
+      {% if reservation.status == 'approved' %} bg-success
+      {% elif reservation.status == 'pending' %} bg-warning text-dark
+      {% elif reservation.status == 'cancelled' %} bg-secondary
+      {% elif reservation.status == 'rejected' %} bg-danger
+      {% endif %}
+    ">
+      {{ reservation.user_status_display }}
+    </span>
+  </div>
+
+  <div class="mb-3">
+    <div class="text-muted-2 small">Termin</div>
+    {% if reservation.slot %}
+      <div class="fw-semibold">{{ reservation.slot.start|date:"d.m.Y H:i" }}</div>
+    {% else %}
+      <div class="fw-semibold">{{ reservation.archived_start|date:"d.m.Y H:i" }}</div>
+      <div class="text-muted-2 small">(termin archiwalny)</div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <div class="text-muted-2 small">Utworzono</div>
+    <div>{{ reservation.created_at|date:"d.m.Y H:i" }}</div>
+  </div>
+
+  {% if reservation.status == 'pending' or reservation.status == 'approved' %}
+    <form method="post" action="{% url 'booking:reservation_cancel' reservation.id %}">
+      {% csrf_token %}
+      <button class="btn btn-danger w-100">Anuluj rezerwację</button>
+    </form>
+  {% else%}
+    <form action="{% url 'booking:service_detail' reservation.service.id%}">
+      <button class="btn btn-primary w-100">Zarezerwuj inny termin</button>
+    </form>
+  {% endif %}
+
+</div>
+
+{% endblock %}

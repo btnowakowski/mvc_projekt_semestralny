@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="admin-hero">
+  <div>
+    <h1 class="mb-1">Panel admina</h1>
+    <div class="text-muted-2 small">Zarządzaj usługami, terminami i rezerwacjami.</div>
+  </div>
+
+  <div class="admin-tabs">
+    <a href="{% url 'booking:admin_services' %}">Usługi</a>
+    <a href="{% url 'booking:admin_slots' %}">Terminy</a>
+    <a class="active" href="{% url 'booking:admin_reservations' %}">Rezerwacje</a>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="stat-card">
+      <span class="stat-dot"></span>
+      <div>
+        <div class="text-muted-2 small">Wszystkie</div>
+        <div class="fs-4 fw-bold">{{ stats.all }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="stat-card">
+      <span class="stat-dot" style="background:#f0ad4e; box-shadow:0 0 12px #f0ad4e;"></span>
+      <div>
+        <div class="text-muted-2 small">Oczekujące</div>
+        <div class="fs-4 fw-bold">{{ stats.pending }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="stat-card">
+      <span class="stat-dot" style="background:#22c55e; box-shadow:0 0 12px #22c55e;"></span>
+      <div>
+        <div class="text-muted-2 small">Potwierdzone</div>
+        <div class="fs-4 fw-bold">{{ stats.approved }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="stat-card">
+      <span class="stat-dot" style="background:#64748b; box-shadow:0 0 12px #64748b;"></span>
+      <div>
+        <div class="text-muted-2 small">Anulowane</div>
+        <div class="fs-4 fw-bold">{{ stats.cancelled }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-lg-5">
+    <div class="card-soft p-3 h-100">
+      <h2 class="h6 mb-3">Rezerwacje wg statusu</h2>
+      <canvas id="chartStatus" height="220"></canvas>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card-soft p-3 h-100">
+      <h2 class="h6 mb-3">Nowe rezerwacje (ostatnie 14 dni)</h2>
+      <canvas id="chartDaily" height="220"></canvas>
+    </div>
+  </div>
+</div>
+
+
+<div class="card-soft p-3">
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <h2 class="h5 mb-0">Rezerwacje do zatwierdzenia</h2>
+    <a class="btn btn-outline-light btn-sm" href="{% url 'booking:admin_reservations' %}">
+      Zobacz wszystkie
+    </a>
+  </div>
+
+  <ul class="mb-0">
+    {% for r in pending %}
+      <li class="py-2 border-bottom border-secondary-subtle d-flex justify-content-between align-items-center">
+        <div>
+          <div class="fw-semibold">{{ r.user.username }} → {{ r.service.name }}</div>
+          <div class="text-muted-2 small">{{ r.slot.start|date:"Y-m-d H:i" }}</div>
+        </div>
+        <div class="d-flex gap-2">
+          <a class="btn btn-success btn-sm" href="{% url 'booking:admin_approve' r.id %}">Zatwierdź</a>
+          <a class="btn btn-outline-danger btn-sm" href="{% url 'booking:admin_reject' r.id %}">Anuluj</a>
+        </div>
+      </li>
+    {% empty %}
+      <li class="text-muted-2">Brak oczekujących rezerwacji.</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<script>
+  const statusLabels = {{ chart_status_labels|safe }};
+  const statusValues = {{ chart_status_values|safe }};
+
+  const dailyLabels = {{ chart_daily_labels|safe }};
+  const dailyValues = {{ chart_daily_values|safe }};
+
+  // donut: statusy
+  new Chart(document.getElementById("chartStatus"), {
+    type: "doughnut",
+    data: {
+      labels: statusLabels,
+      datasets: [{
+        data: statusValues,
+        borderWidth: 0,
+        hoverOffset: 6
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { position: "bottom", labels: { color: "#cbd5e1" } }
+      }
+    }
+  });
+
+  // line: dzienne
+  new Chart(document.getElementById("chartDaily"), {
+    type: "line",
+    data: {
+      labels: dailyLabels,
+      datasets: [{
+        data: dailyValues,
+        tension: 0.35,
+        fill: true,
+        borderWidth: 2,
+        pointRadius: 3
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        x: { ticks: { color: "#9aa4b2" }, grid: { color: "rgba(255,255,255,.06)" } },
+        y: { ticks: { color: "#9aa4b2" }, grid: { color: "rgba(255,255,255,.06)" } }
+      }
+    }
+  });
+</script>
+
+
+{% endblock %}

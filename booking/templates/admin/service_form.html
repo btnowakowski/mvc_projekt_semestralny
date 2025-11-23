@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="admin-hero">
+  <h1 class="mb-0">Usługa</h1>
+  <a class="btn btn-outline-light btn-sm" href="{% url 'booking:admin_services' %}">← Lista Usług</a>
+</div>
+
+<div class="card-soft p-4">
+  <form method="post" class="row g-3">
+    {% csrf_token %}
+
+    <div class="col-12">
+      <label class="form-label">Nazwa</label>
+      {{ form.name }}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Opis</label>
+      {{ form.description }}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Cena</label>
+      {{ form.price }}
+    </div>
+
+    <div class="d-flex gap-2 mt-2">
+      <button class="btn btn-success">Zapisz</button>
+      <a class="btn btn-outline-light" href="{% url 'booking:admin_services' %}">Anuluj</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

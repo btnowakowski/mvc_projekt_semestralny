@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="text-center py-5">
+
+  <h1 class="display-4 fw-bold mb-3">Wybierz usługę. Zarezerwuj termin. Gotowe.</h1>
+  <p class="text-muted-2 fs-5 mb-4">
+    Umawiaj wizyty, rezerwuj terminy i zarządzaj usługami w nowoczesnym systemie online.
+  </p>
+
+  <a href="{% url 'booking:service_list' %}" class="btn btn-primary btn-lg px-5">
+    Przejdź do usług
+  </a>
+
+</div>
+
+<div class="row g-4 mt-5">
+
+  <div class="col-md-4">
+    <div class="card-soft p-4 h-100">
+      <h4 class="fw-semibold mb-2">Rezerwacje online</h4>
+      <p class="text-muted-2">Zarezerwuj termin w kilka sekund - wszystko w jednym miejscu.</p>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card-soft p-4 h-100">
+      <h4 class="fw-semibold mb-2">Nowoczesny kalendarz</h4>
+      <p class="text-muted-2">Przeglądaj wolne terminy w czytelnym kalendarzu tygodniowym.</p>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card-soft p-4 h-100">
+      <h4 class="fw-semibold mb-2">Zarządzanie rezerwacjami</h4>
+      <p class="text-muted-2">Zarządzaj swoimi rezerwacjami w jednym miejscu.</p>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
