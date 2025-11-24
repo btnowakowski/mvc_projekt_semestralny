@@ -25,8 +25,13 @@ load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 DEBUG = os.environ.get("DJANGO_DEBUG") == "1"
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
-
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.getenv("ALLOWED_HOSTS", "").split(",")
+    if h.strip()
+]
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -140,13 +145,21 @@ LOGGING = {
     "disable_existing_loggers": False,
 }
 
-SECURE_SSL_REDIRECT = False
-CSRF_COOKIE_SECURE = False
-SESSION_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 SECURE_HSTS_PRELOAD = False
 
+CSRF_TRUSTED_ORIGINS = [
+    h.strip()
+    for h in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if h.strip()
+]
+
 LOGIN_REDIRECT_URL = "/services/"
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "/accounts/login/"
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True  # opcjonalnie, ale warto przy reverse proxy

@@ -21,7 +21,7 @@ from django.contrib.auth import views as auth_views
 from booking.forms import CustomAuthForm
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    # path("admin/", admin.site.urls),
     path("", include(("booking.urls", "booking"), namespace="booking")),
     path(
         "accounts/login/",
