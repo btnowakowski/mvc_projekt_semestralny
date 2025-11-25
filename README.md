@@ -4,7 +4,9 @@
 The app lets users browse services, book available time slots in a calendar view, and track the status of their reservations.  
 Admins get a dedicated panel where they can manage services, slots, and approve or reject bookings.
 
-This repository contains the **Django project only** (no Docker / server files) – it’s meant to be clean, easy to read and simple to run locally.
+
+This repository contains the Django project along with a Dockerfile for building the application image, but does not include full server infrastructure (no docker-compose, nginx config, certificates, deployment scripts).
+The goal is to keep the project clean, easy to read, and simple to run locally.
 
 ---
 
