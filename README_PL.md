@@ -43,6 +43,8 @@ Funkcje:
   - dodawanie, edycja, usuwanie
   - włączanie / wyłączanie aktywności terminów (`is_active`)
 - Spójny, ciemny motyw UI
+<img width="1020" height="857" alt="image" src="https://github.com/user-attachments/assets/32e3f528-f531-47be-a0c7-fad4db9f8a84" />
+
 
 ### UX i UI
 - Globalny ciemny motyw (custom CSS: `booking/static/booking/style.css`)
