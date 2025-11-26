@@ -87,8 +87,11 @@ def approve_reservation(request, pk):
 @admin_required
 def reject_reservation(request, pk):
     r = get_object_or_404(Reservation, pk=pk)
+    if r.slot:
+        r.archived_start = r.slot.start
+        r.archived_end = r.slot.end
+        r.slot = None
     r.status = Reservation.Status.REJECTED
-    r.slot = None
     r.save(update_fields=["status", "slot", "archived_start", "archived_end"])
     return redirect("booking:admin_dashboard")
 

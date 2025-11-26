@@ -140,8 +140,11 @@ class ReservationDetailView(LoginRequiredMixin, DetailView):
 
 def cancel_reservation(request, pk):
     res = get_object_or_404(Reservation, pk=pk, user=request.user)
+    if res.slot:
+        res.archived_start = res.slot.start
+        res.archived_end = res.slot.end
+        res.slot = None
     res.status = Reservation.Status.CANCELLED
-    res.slot = None  # ← slot staje się wolny
     res.save(update_fields=["status", "slot", "archived_start", "archived_end"])
     return redirect("booking:my_reservations")
 
